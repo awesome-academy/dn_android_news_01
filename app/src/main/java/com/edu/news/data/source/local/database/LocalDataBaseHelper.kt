@@ -7,7 +7,8 @@ import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
 import com.edu.news.data.model.Category
-import com.edu.news.data.source.local.OnFetchDataListener
+import com.edu.news.data.model.CategoryType
+import com.edu.news.data.source.OnFetchDataListener
 import com.edu.news.data.source.local.OnPostDataListener
 
 class LocalDataBaseHelper internal constructor(context: Context)
@@ -22,12 +23,15 @@ class LocalDataBaseHelper internal constructor(context: Context)
         onCreate(db)
     }
 
-    fun saveCategories(listener: OnPostDataListener<Exception>, categoryNames: MutableList<String>)  {
+    fun saveCategories(
+        listener: OnPostDataListener<Exception>,
+        categoryTypes: MutableList<CategoryType>
+    ) {
         try {
             val db = this@LocalDataBaseHelper.writableDatabase
-            for (i in categoryNames.indices) {
+            for (i in categoryTypes.indices) {
                 val values = ContentValues().apply {
-                    put(COLUMN_NAME, categoryNames[i])
+                    put(COLUMN_NAME, categoryTypes[i].nameType)
                     put(COLUMN_POSITION, i)
                     put(COLUMN_ENABLE, 1)
                 }
@@ -58,10 +62,11 @@ class LocalDataBaseHelper internal constructor(context: Context)
             val categories = mutableListOf<Category>()
             with(cursor) {
                 while (moveToNext()) {
-                    val name = getString(getColumnIndex(COLUMN_NAME))
+                    val type = getString(getColumnIndex(COLUMN_NAME))
                     val position = getInt(getColumnIndex(COLUMN_POSITION))
-                    val enable = getInt(getColumnIndex(COLUMN_ENABLE))
-                    categories.add(Category(name, position, enable == 1))
+                    val isEnable = getInt(getColumnIndex(COLUMN_ENABLE)) == 1
+                    val categoryType = CategoryType.values().first { type == it.nameType }
+                    categories.add(Category(categoryType, position, isEnable))
                 }
             }
             cursor.close()

@@ -1,7 +1,9 @@
 package com.edu.news.data.source.local
 
 import com.edu.news.data.model.Category
+import com.edu.news.data.model.CategoryType
 import com.edu.news.data.source.CategoryDataSource
+import com.edu.news.data.source.OnFetchDataListener
 import com.edu.news.data.source.local.database.LocalDataBaseHelper
 import java.lang.Exception
 
@@ -11,8 +13,8 @@ class CategoryLocalDataSource(private val database: LocalDataBaseHelper) : Categ
         database.getCategory(listener)
     }
 
-    override fun saveCategoriesToLocal(listener: OnPostDataListener<Exception>, categoryNames: MutableList<String>) {
-        database.saveCategories(listener, categoryNames)
+    override fun saveCategoriesToLocal(listener: OnPostDataListener<Exception>, categoryTypes: MutableList<CategoryType>) {
+        database.saveCategories(listener, categoryTypes)
     }
 
     companion object {

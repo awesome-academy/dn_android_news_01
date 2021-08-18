@@ -2,9 +2,11 @@ package com.edu.news.screen.home
 
 import android.view.View
 import android.widget.Toast
+import com.edu.news.data.model.CategoryType
 import com.edu.news.data.source.CategoryRepository
 import com.edu.news.data.source.local.CategoryLocalDataSource
 import com.edu.news.data.source.local.database.LocalDataBaseHelper
+import com.edu.news.screen.home.articles.ArticlesFragment
 import com.edu.news.utils.base.BaseFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.sun.news.R
@@ -15,16 +17,6 @@ class HomeFragment : BaseFragment(), HomeContract.View {
 
     private lateinit var homePresenter: HomePresenter
     private val homeAdapter by lazy { HomeAdapter(this) }
-    private val categories = mutableListOf(
-        "Following",
-        "Top-Headline",
-        "Sport",
-        "Technology",
-        "Business",
-        "Entertainment",
-        "Health"
-    )
-
     override fun getLayoutResourceId() = R.layout.fragment_home
 
     override fun initView(view: View) {
@@ -43,18 +35,20 @@ class HomeFragment : BaseFragment(), HomeContract.View {
         }?.run {
             homePresenter = this
             setView(this@HomeFragment)
-            onStart()
+            getCategories()
         }
     }
 
-    override fun onGetCategoriesSuccess(result: MutableList<String>?) {
+    override fun onGetCategoriesSuccess(result: MutableList<CategoryType>?) {
         if (result?.isNullOrEmpty() == true) {
-            result.addAll(categories)
+            result.addAll(CategoryType.values().toMutableList())
             homePresenter.saveCategories(result)
         }
-        homeAdapter.updateData(result)
+        homeAdapter.updateData(result.map { categoryType ->
+            ArticlesFragment.newInstance(categoryType)
+        }.toMutableList())
         TabLayoutMediator(tabLayoutCategoryHome, viewPagerCategoryHome) { tab, position ->
-            tab.text = result[position]
+            tab.text = result[position].nameType
         }.attach()
     }
 
