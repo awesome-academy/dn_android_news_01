@@ -5,13 +5,4 @@
     <string name="favorite">Favorite</string>
     <string name="search">Search</string>
     <string name="category">Category</string>
-    <string-array name="categories">
-        <item>Following</item>
-        <item>Top-Headline</item>
-        <item>Sport</item>
-        <item>Technology</item>
-        <item>Business</item>
-        <item>Entertainment</item>
-        <item>Health</item>
-    </string-array>
 </resources>
