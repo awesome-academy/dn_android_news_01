@@ -1,4 +1,4 @@
-package com.edu.news.data.source.local
+package com.edu.news.data.source
 
 import java.lang.Exception
 

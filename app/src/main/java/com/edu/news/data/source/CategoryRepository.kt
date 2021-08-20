@@ -1,7 +1,7 @@
 package com.edu.news.data.source
 
 import com.edu.news.data.model.Category
-import com.edu.news.data.source.local.OnFetchDataListener
+import com.edu.news.data.model.CategoryType
 import com.edu.news.data.source.local.OnPostDataListener
 import java.lang.Exception
 
@@ -12,8 +12,8 @@ class CategoryRepository private constructor(
         local.getCategoriesFromLocal(listener)
     }
 
-    fun saveCategories(listener: OnPostDataListener<Exception>, categoryNames: MutableList<String>) {
-        local.saveCategoriesToLocal(listener, categoryNames)
+    fun saveCategories(listener: OnPostDataListener<Exception>, categoryTypes: MutableList<CategoryType>) {
+        local.saveCategoriesToLocal(listener, categoryTypes)
     }
 
     companion object {
