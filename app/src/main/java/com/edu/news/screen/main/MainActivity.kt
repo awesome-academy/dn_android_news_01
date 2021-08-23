@@ -20,7 +20,10 @@ class MainActivity : BaseActivity() {
             FavoriteFragment.newInstance(),
             FollowsFragment.newInstance()
         )
-        viewPagerBottomNavigation.adapter = BottomNavAdapter(this, fragments)
+        viewPagerBottomNavigation.apply {
+            isUserInputEnabled = false
+            adapter = BottomNavAdapter(this@MainActivity, fragments)
+        }
         registerEventNavigation()
     }
 
