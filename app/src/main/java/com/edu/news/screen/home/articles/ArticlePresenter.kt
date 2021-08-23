@@ -14,7 +14,7 @@ class ArticlePresenter internal constructor(private val repository: ArticleRepos
         this.view = view
     }
 
-    override fun getArticles(categoryType: CategoryType) {
+    override fun getArticles(categoryType: CategoryType, pageNumber: Int) {
         repository.getArticles(object : OnFetchDataListener<MutableList<Article>> {
             override fun onSuccess(data: MutableList<Article>) {
                 view?.onGetArticlesSuccess(data)
@@ -23,6 +23,6 @@ class ArticlePresenter internal constructor(private val repository: ArticleRepos
             override fun onError(exception: Exception) {
                 view?.onError(exception)
             }
-        }, categoryType)
+        }, categoryType, pageNumber)
     }
 }

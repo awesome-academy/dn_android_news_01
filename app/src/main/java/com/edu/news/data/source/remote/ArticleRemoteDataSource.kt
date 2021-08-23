@@ -11,12 +11,16 @@ class ArticleRemoteDataSource : ArticleDataSource.Remote {
 
     private val apiService = GetDataFromUrl()
     private val urlGetArticles =
-        Constant.BASE_URL + Constant.BASE_COUNTRY + Constant.PAGE_SIZE + Constant.BASE_API_KEY
+        Constant.BASE_URL + Constant.BASE_COUNTRY + Constant.BASE_API_KEY
 
-    override fun getArticles(listener: OnFetchDataListener<MutableList<Article>>, categoryType: CategoryType) {
-        var key = if (categoryType == CategoryType.TOP_HEADLINE) ""
-        else Constant.BASE_CATEGORY_PARAM + categoryType.nameType
-        apiService.callAPI(listener, urlGetArticles, key)
+    override fun getArticles(
+        listener: OnFetchDataListener<MutableList<Article>>,
+        categoryType: CategoryType,
+        pageNumber: Int
+    ) {
+        val key = if (categoryType == CategoryType.TOP_HEADLINE) Constant.BASE_PAGE_PARAM
+        else Constant.BASE_CATEGORY_PARAM + categoryType.nameType + Constant.BASE_PAGE_PARAM
+        apiService.callAPI(listener, urlGetArticles, key + pageNumber)
     }
 
     companion object {

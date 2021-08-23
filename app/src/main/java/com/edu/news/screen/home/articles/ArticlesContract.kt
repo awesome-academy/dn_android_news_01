@@ -12,6 +12,6 @@ class ArticlesContract {
     }
 
     interface Presenter : BasePresenter<View> {
-        fun getArticles(categoryType: CategoryType)
+        fun getArticles(categoryType: CategoryType, pageNumber: Int)
     }
 }
