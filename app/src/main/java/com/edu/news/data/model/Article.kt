@@ -1,5 +1,9 @@
 package com.edu.news.data.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Article(
     var id: String = "",
     var name: String = "",
@@ -9,7 +13,7 @@ data class Article(
     var urlToImage: String = "",
     var publishedAt: String = "",
     var content: String = ""
-)
+) : Parcelable
 
 object ArticleEntry {
     const val OBJECT = "articles"

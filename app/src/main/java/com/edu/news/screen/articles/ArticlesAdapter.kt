@@ -1,4 +1,4 @@
-package com.edu.news.screen.home.articles
+package com.edu.news.screen.articles
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,12 +6,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.edu.news.data.model.Article
 import com.edu.news.data.source.remote.fetchData.LoadImageFromUrl
+import com.edu.news.utils.Constant
 import com.sun.news.R
 import kotlinx.android.synthetic.main.item_article.view.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class ArticlesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ArticlesAdapter(
+    private val onItemClickListener: ((Article) -> Unit)
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val articles = mutableListOf<Article?>()
 
@@ -39,7 +42,7 @@ class ArticlesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return if (viewType == VIEW_TYPE_DATA) {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_article, parent, false)
-            ArticleViewHolder(view)
+            ArticleViewHolder(view, onItemClickListener)
         } else {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_progressbar, parent, false)
@@ -55,21 +58,35 @@ class ArticlesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        articles[position]?.let { ArticleViewHolder(holder.itemView).bind(it) }
+        articles[position]?.let { ArticleViewHolder(holder.itemView, onItemClickListener).bind(it) }
     }
 
     override fun getItemCount() = articles.size
 
-    class ArticleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ArticleViewHolder(
+        view: View,
+        private val onItemClickListener: (Article) -> Unit
+    ) : RecyclerView.ViewHolder(view) {
+
+        private var articleData: Article? = null
+
+        init {
+            itemView.setOnClickListener {
+                articleData?.let {
+                    onItemClickListener(it)
+                }
+            }
+        }
 
         fun bind(article: Article) = with(itemView) {
             article.let {
                 textViewTitle.text = it.title
                 textViewDateTime.text =
                     LocalDateTime.parse(it.publishedAt, DateTimeFormatter.ISO_DATE_TIME)
-                        .format(DateTimeFormatter.ofPattern(DATETIME_FORMAT))
+                        .format(DateTimeFormatter.ofPattern(Constant.DATE_TIME_FORMAT))
                 textViewPublisher.text = it.name
                 LoadImageFromUrl(imageArticle).loadImage(it.urlToImage)
+                articleData = it
             }
         }
     }
@@ -79,6 +96,5 @@ class ArticlesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
         private const val VIEW_TYPE_DATA = 0
         private const val VIEW_TYPE_PROGRESS = 1
-        private const val DATETIME_FORMAT = "dd.MM.yyyy HH:mm"
     }
 }

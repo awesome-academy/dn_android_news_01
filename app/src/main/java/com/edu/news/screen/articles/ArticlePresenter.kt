@@ -1,4 +1,4 @@
-package com.edu.news.screen.home.articles
+package com.edu.news.screen.articles
 
 import com.edu.news.data.model.Article
 import com.edu.news.data.model.CategoryType
