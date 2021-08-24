@@ -6,7 +6,7 @@ import com.edu.news.data.model.CategoryType
 import com.edu.news.data.source.CategoryRepository
 import com.edu.news.data.source.local.CategoryLocalDataSource
 import com.edu.news.data.source.local.database.LocalDataBaseHelper
-import com.edu.news.screen.home.articles.ArticlesFragment
+import com.edu.news.screen.articles.ArticlesFragment
 import com.edu.news.utils.base.BaseFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.sun.news.R

@@ -1,4 +1,4 @@
-package com.edu.news.screen.home.articles
+package com.edu.news.screen.articles
 
 import android.view.View
 import android.widget.Toast
@@ -10,7 +10,9 @@ import com.edu.news.data.model.Article
 import com.edu.news.data.model.CategoryType
 import com.edu.news.data.source.ArticleRepository
 import com.edu.news.data.source.remote.ArticleRemoteDataSource
+import com.edu.news.screen.detail.DetailFragment
 import com.edu.news.utils.base.BaseFragment
+import com.edu.news.utils.ext.addFragment
 import com.sun.news.R
 import kotlinx.android.synthetic.main.fragment_articles.view.*
 
@@ -18,7 +20,9 @@ class ArticlesFragment : BaseFragment(), ArticlesContract.View {
 
     private lateinit var articlePresenter: ArticlePresenter
     private lateinit var categoryType: CategoryType
-    private val articlesAdapter by lazy { ArticlesAdapter() }
+    private val articlesAdapter by lazy {
+        ArticlesAdapter { onItemClickListener(it) }
+    }
     private var pageNumber = 1
 
     override fun getLayoutResourceId() = R.layout.fragment_articles
@@ -74,6 +78,12 @@ class ArticlesFragment : BaseFragment(), ArticlesContract.View {
 
     override fun onError(exception: Exception?) {
         Toast.makeText(view?.context, exception.toString(), Toast.LENGTH_SHORT).show()
+    }
+
+    private fun onItemClickListener(item: Article?) {
+        item?.let {
+            addFragment(R.id.frameLayoutContainer, DetailFragment.newInstance(it), true)
+        }
     }
 
     companion object {
